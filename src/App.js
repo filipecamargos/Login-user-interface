@@ -3,6 +3,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import MainHeader from "./components/MainHeader/MainHeader";
+import AuthContext from "./store/auth-store";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,7 +16,7 @@ function App() {
     if (storedLoggedIn === "1") {
       setIsLoggedIn(true);
     }
-  }, []) //Manage to handle for the first time since the dependency never changes
+  }, []); //Manage to handle for the first time since the dependency never changes
 
   const loginHandler = (email, password) => {
     localStorage.setItem("isLoggedIn", "1");
@@ -28,13 +29,13 @@ function App() {
   };
 
   return (
-    <Fragment>
+    <AuthContext.Provider value={{isLoggedIn: isLoggedIn}}>
       <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
         {isLoggedIn && <Home onLogout={logoutHandler} />}
       </main>
-    </Fragment>
+    </AuthContext.Provider>
   );
 }
 
